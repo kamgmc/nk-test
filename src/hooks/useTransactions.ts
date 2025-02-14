@@ -1,10 +1,27 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { fetchTransactions } from "@/services/transactions.ts";
-import { Transaction } from "@/types/transaction.interface.ts";
 import { toast } from "sonner";
+import { useRecoilState, useRecoilValue } from "recoil";
+import {
+  transactionsFilterState,
+  transactionsState,
+} from "@/stores/transactions.ts";
 
 export default function useTransactions() {
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [transactions, setTransactions] = useRecoilState(transactionsState);
+  const filters = useRecoilValue(transactionsFilterState);
+  const filteredTransactions = useMemo(() => {
+    return transactions.filter((transaction) => {
+      const transactionDate = new Date(transaction.date).getDate();
+      const startDate = new Date(filters.startDate || "").getDate();
+      const endDate = new Date(filters.endDate || "").getDate();
+
+      if (startDate && transactionDate < startDate) {
+        return false;
+      }
+      return !(endDate && transactionDate > endDate);
+    });
+  }, [transactions, filters]);
 
   const getTransactions = async () => {
     try {
@@ -22,6 +39,6 @@ export default function useTransactions() {
   }, []);
 
   return {
-    transactions,
+    transactions: filteredTransactions,
   };
 }

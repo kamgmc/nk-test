@@ -4,3 +4,8 @@ export interface Transaction {
   description: string;
   amount: number;
 }
+
+export interface TransactionFilter {
+  startDate: string | null;
+  endDate: string | null;
+}

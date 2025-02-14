@@ -6,7 +6,7 @@ export default {
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
-    "./node_modules/@heroui/theme/dist/components/(table|checkbox|form|spacer).js",
+    "./node_modules/@heroui/theme/dist/components/(button|input|table|ripple|spinner|form|checkbox|spacer).js",
   ],
   theme: {
     extend: {},

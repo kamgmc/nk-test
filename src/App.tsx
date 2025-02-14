@@ -1,4 +1,4 @@
-import TransactionsPage from "@/pages/TransactionsPage.tsx";
+import TransactionsPage from "@/pages/transactions/TransactionsPage.tsx";
 
 export default function App() {
   return (
