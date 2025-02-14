@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { fetchTransactions } from "@/services/transactions.ts";
 import { Transaction } from "@/types/transaction.interface.ts";
+import { toast } from "sonner";
 
 export default function useTransactions() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -9,9 +10,8 @@ export default function useTransactions() {
     try {
       const response = await fetchTransactions();
       setTransactions(response);
-    } catch (error) {
-      // TODO: Handle error
-      alert(error);
+    } catch (_error) {
+      toast.error("Failed to fetch transactions");
     }
   };
 
