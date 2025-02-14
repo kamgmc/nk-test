@@ -4,12 +4,18 @@ import { toast } from "sonner";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
   transactionsFilterState,
+  transactionsPaginationState,
   transactionsState,
 } from "@/stores/transactions.ts";
+
+const TRANSACTIONS_PER_PAGE = 5;
 
 export default function useTransactions() {
   const [transactions, setTransactions] = useRecoilState(transactionsState);
   const filters = useRecoilValue(transactionsFilterState);
+  const [pagination, setPagination] = useRecoilState(
+    transactionsPaginationState,
+  );
 
   const filteredTransactions = useMemo(() => {
     if (!transactions.length) return [];
@@ -21,7 +27,7 @@ export default function useTransactions() {
       ? new Date(filters.endDate).getTime()
       : null;
 
-    return transactions.filter((transaction) => {
+    const filtered = transactions.filter((transaction) => {
       const transactionDate = new Date(transaction.date).getTime();
 
       if (startDate && transactionDate < startDate) {
@@ -29,12 +35,24 @@ export default function useTransactions() {
       }
       return !(endDate && transactionDate > endDate);
     });
-  }, [transactions, filters]);
+
+    if (pagination) {
+      const startIndex = (pagination.currentPage - 1) * TRANSACTIONS_PER_PAGE;
+      const endIndex = startIndex + TRANSACTIONS_PER_PAGE;
+
+      return filtered.slice(startIndex, endIndex);
+    }
+    return filtered;
+  }, [transactions, filters, pagination]);
 
   const getTransactions = async () => {
     try {
       const response = await fetchTransactions();
       setTransactions(response);
+      setPagination({
+        currentPage: 1,
+        totalPages: Math.ceil(response.length / TRANSACTIONS_PER_PAGE),
+      });
     } catch (_error) {
       toast.error("Failed to fetch transactions");
     }

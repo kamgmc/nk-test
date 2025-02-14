@@ -7,6 +7,7 @@ import {
   TableRow,
 } from "@heroui/table";
 import { Transaction } from "@/types/transaction.interface.ts";
+import TransactionTablePagination from "@/pages/transactions/components/TransactionTablePagination.tsx";
 
 interface TransactionTableProps {
   transactions: Transaction[];
@@ -16,7 +17,10 @@ export default function TransactionTable({
   transactions,
 }: TransactionTableProps) {
   return (
-    <Table aria-label="Example static collection table">
+    <Table
+      aria-label="Example static collection table"
+      bottomContent={<TransactionTablePagination />}
+    >
       <TableHeader>
         <TableColumn>ID</TableColumn>
         <TableColumn>Date</TableColumn>
