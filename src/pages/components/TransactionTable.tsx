@@ -6,36 +6,32 @@ import {
   TableHeader,
   TableRow,
 } from "@heroui/table";
+import { Transaction } from "@/types/transaction.interface.ts";
 
-export default function TransactionTable() {
+interface TransactionTableProps {
+  transactions: Transaction[];
+}
+
+export default function TransactionTable({
+  transactions,
+}: TransactionTableProps) {
   return (
-    <Table removeWrapper aria-label="Example static collection table">
+    <Table aria-label="Example static collection table">
       <TableHeader>
-        <TableColumn>NAME</TableColumn>
-        <TableColumn>ROLE</TableColumn>
-        <TableColumn>STATUS</TableColumn>
+        <TableColumn>ID</TableColumn>
+        <TableColumn>Date</TableColumn>
+        <TableColumn>Description</TableColumn>
+        <TableColumn>Amount (USD)</TableColumn>
       </TableHeader>
       <TableBody>
-        <TableRow key="1">
-          <TableCell>Tony Reichert</TableCell>
-          <TableCell>CEO</TableCell>
-          <TableCell>Active</TableCell>
-        </TableRow>
-        <TableRow key="2">
-          <TableCell>Zoey Lang</TableCell>
-          <TableCell>Technical Lead</TableCell>
-          <TableCell>Paused</TableCell>
-        </TableRow>
-        <TableRow key="3">
-          <TableCell>Jane Fisher</TableCell>
-          <TableCell>Senior Developer</TableCell>
-          <TableCell>Active</TableCell>
-        </TableRow>
-        <TableRow key="4">
-          <TableCell>William Howard</TableCell>
-          <TableCell>Community Manager</TableCell>
-          <TableCell>Vacation</TableCell>
-        </TableRow>
+        {transactions.map((transaction) => (
+          <TableRow key={transaction.id}>
+            <TableCell>{transaction.id}</TableCell>
+            <TableCell>{transaction.date}</TableCell>
+            <TableCell>{transaction.description}</TableCell>
+            <TableCell>{transaction.amount}</TableCell>
+          </TableRow>
+        ))}
       </TableBody>
     </Table>
   );
