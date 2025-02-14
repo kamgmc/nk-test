@@ -10,11 +10,19 @@ import {
 export default function useTransactions() {
   const [transactions, setTransactions] = useRecoilState(transactionsState);
   const filters = useRecoilValue(transactionsFilterState);
+
   const filteredTransactions = useMemo(() => {
+    if (!transactions.length) return [];
+
+    const startDate = filters.startDate
+      ? new Date(filters.startDate).getTime()
+      : null;
+    const endDate = filters.endDate
+      ? new Date(filters.endDate).getTime()
+      : null;
+
     return transactions.filter((transaction) => {
-      const transactionDate = new Date(transaction.date).getDate();
-      const startDate = new Date(filters.startDate || "").getDate();
-      const endDate = new Date(filters.endDate || "").getDate();
+      const transactionDate = new Date(transaction.date).getTime();
 
       if (startDate && transactionDate < startDate) {
         return false;
