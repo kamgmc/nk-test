@@ -14,10 +14,10 @@ export default function useTransactions() {
   const filteredTransactions = useMemo(() => {
     if (!transactions.length) return [];
 
-    const startDate = filters.startDate
+    const startDate = filters?.startDate
       ? new Date(filters.startDate).getTime()
       : null;
-    const endDate = filters.endDate
+    const endDate = filters?.endDate
       ? new Date(filters.endDate).getTime()
       : null;
 
